@@ -151,7 +151,7 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   echo "" >> dngrcoin.conf_TEMP
   echo "port=$PORT" >> dngrcoin.conf_TEMP
-  echo "masternodeaddr=$IP:49002" >> dngrcoin.conf_TEMP
+  #echo "masternodeaddr=$IP:49002" >> dngrcoin.conf_TEMP
   echo "masternodeprivkey=$PRIVKEY" >> dngrcoin.conf_TEMP
   
   
