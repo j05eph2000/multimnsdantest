@@ -44,7 +44,7 @@ echo "/swapfile none swap sw 0 0" >> /etc/fstab
 
 fi
   #wget https://github.com/wagerr/wagerr/releases/download/v3.0.1/wagerr-3.0.1-x86_64-linux-gnu.tar.gz
-  wget https://github.com/Streamies/Streamies/releases/download/v2.2/Streamies-2.2.0-x86_64-pc-linux-gnu.zip
+  wget https://github.com/dngrcoin/dngrcoin/releases/download/v1.7.3/dngrcoind-for-ubuntu-16.04.tar.gz
   #wget https://github.com/wagerr/Wagerr-Blockchain-Snapshots/releases/download/Block-826819/826819.zip -O bootstrap.zip
   #export fileid=1cCOIb-Xqs_MxsIPiwEAtvQps_6R1Ww13
   #export filename=Streamies-2.0.0-x86_64-pc-linux-gnu.zip
@@ -61,7 +61,7 @@ fi
 
   #wget --load-cookies cookies.txt -O $filename \
   #   'https://docs.google.com/uc?export=download&id='$fileid'&confirm='$(<confirm.txt)
-  unzip Streamies-2.2.0-x86_64-pc-linux-gnu.zip
+  tar xvzf dngrcoind-for-ubuntu-16.04.tar.gz
   sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   sudo apt -y update
   sudo apt -y upgrade
@@ -73,15 +73,15 @@ fi
   sudo apt -y update
   sudo apt -y upgrade
   
-  chmod +x streamiesd
-  chmod +x streamies-cli
-  sudo cp  streamiesd /usr/local/bin
-  sudo cp  streamies-cli /usr/local/bin
-  rm -rf Streamies-2.2.0-x86_64-pc-linux-gnu.zip
-  rm -rf streamies-cli
-  rm -rf streamiesd
-  rm -rf streamies-tx
-  rm -rf streamies-qt
+  chmod +x dngrcoind
+  chmod +x dngrcoin-cli
+  sudo cp  dngrcoind /usr/local/bin
+  sudo cp  dngrcoin-cli /usr/local/bin
+  rm -rf dngrcoind-for-ubuntu-16.04.tar.gz
+  rm -rf dngrcoin-cli
+  rm -rf dngrcoind
+  rm -rf dngrcoin-tx
+  rm -rf dngrcoin-qt
   
   sudo apt install -y ufw
   sudo ufw allow ssh/tcp
@@ -124,61 +124,53 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "The RPC port is $RPCPORT"
 
   ALIAS=${ALIAS}
-  CONF_DIR=~/.streamies_$ALIAS
+  CONF_DIR=~/.dngrcoin_$ALIAS
 
   # Create scripts
-  echo '#!/bin/bash' > ~/bin/streamiesd_$ALIAS.sh
-  echo "streamiesd -daemon -conf=$CONF_DIR/streamies.conf -datadir=$CONF_DIR "'$*' >> ~/bin/streamiesd_$ALIAS.sh
-  echo '#!/bin/bash' > ~/bin/streamies-cli_$ALIAS.sh
-  echo "streamies-cli -conf=$CONF_DIR/streamies.conf -datadir=$CONF_DIR "'$*' >> ~/bin/streamies-cli_$ALIAS.sh
-  echo '#!/bin/bash' > ~/bin/streamies-tx_$ALIAS.sh
-  echo "streamies-tx -conf=$CONF_DIR/streamies.conf -datadir=$CONF_DIR "'$*' >> ~/bin/streamies-tx_$ALIAS.sh 
-  chmod 755 ~/bin/streamies*.sh
+  echo '#!/bin/bash' > ~/bin/dngrcoind_$ALIAS.sh
+  echo "dngrcoind -daemon -conf=$CONF_DIR/dngrcoin.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dngrcoind_$ALIAS.sh
+  echo '#!/bin/bash' > ~/bin/dngrcoin-cli_$ALIAS.sh
+  echo "dngrcoin-cli -conf=$CONF_DIR/dngrcoin.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dngrcoin-cli_$ALIAS.sh
+  echo '#!/bin/bash' > ~/bin/dngrcoin-tx_$ALIAS.sh
+  echo "dngrcoin-tx -conf=$CONF_DIR/dngrcoin.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dngrcoin-tx_$ALIAS.sh 
+  chmod 755 ~/bin/dngrcoin*.sh
 
   mkdir -p $CONF_DIR
   #unzip  bootstrap.zip -d $CONF_DIR
-  echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> streamies.conf_TEMP
-  echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> streamies.conf_TEMP
-  echo "rpcallowip=127.0.0.1" >> streamies.conf_TEMP
-  echo "rpcport=$RPCPORT" >> streamies.conf_TEMP
-  echo "listen=1" >> streamies.conf_TEMP
-  echo "server=1" >> streamies.conf_TEMP
-  echo "daemon=1" >> streamies.conf_TEMP
-  echo "logtimestamps=1" >> streamies.conf_TEMP
-  echo "maxconnections=256" >> streamies.conf_TEMP
-  echo "masternode=1" >> streamies.conf_TEMP
-  echo "" >> streamies.conf_TEMP
+  echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> dngrcoin.conf_TEMP
+  echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> dngrcoin.conf_TEMP
+  echo "rpcallowip=127.0.0.1" >> dngrcoin.conf_TEMP
+  echo "rpcport=$RPCPORT" >> dngrcoin.conf_TEMP
+  echo "listen=1" >> dngrcoin.conf_TEMP
+  echo "server=1" >> dngrcoin.conf_TEMP
+  echo "daemon=1" >> dngrcoin.conf_TEMP
+  echo "logtimestamps=1" >> dngrcoin.conf_TEMP
+  echo "maxconnections=256" >> dngrcoin.conf_TEMP
+  echo "masternode=1" >> dngrcoin.conf_TEMP
+  echo "" >> dngrcoin.conf_TEMP
 
-  echo "" >> streamies.conf_TEMP
-  echo "port=$PORT" >> streamies.conf_TEMP
-  echo "masternodeaddr=$IP:55297" >> streamies.conf_TEMP
-  echo "masternodeprivkey=$PRIVKEY" >> streamies.conf_TEMP
-  echo "addnode=172.105.62.134" >> streamies.conf_TEMP
-  echo "addnode=172.86.75.178" >> streamies.conf_TEMP
-  echo "addnode=172.86.75.16" >> streamies.conf_TEMP
-  echo "addnode=172.86.75.176" >> streamies.conf_TEMP
-  echo "addnode=45.76.83.165:55297" >> streamies.conf_TEMP
-  echo "addnode=145.129.129.109:55297" >> streamies.conf_TEMP
-  echo "addnode=174.86.28.8:55297" >> streamies.conf_TEMP
-  echo "addnode=95.179.246.187:55297" >> streamies.conf_TEMP
-
+  echo "" >> dngrcoin.conf_TEMP
+  echo "port=$PORT" >> dngrcoin.conf_TEMP
+  echo "masternodeaddr=$IP:49002" >> dngrcoin.conf_TEMP
+  echo "masternodeprivkey=$PRIVKEY" >> dngrcoin.conf_TEMP
+  
   
   sudo ufw allow $PORT/tcp
 
-  mv streamies.conf_TEMP $CONF_DIR/streamies.conf
+  mv dngrcoin.conf_TEMP $CONF_DIR/dngrcoin.conf
   
   #sh ~/bin/iond_$ALIAS.sh
   
-  cat << EOF > /etc/systemd/system/streamies_$ALIAS.service
+  cat << EOF > /etc/systemd/system/dngrcoin_$ALIAS.service
 [Unit]
-Description=streamies_$ALIAS service
+Description=dngrcoin_$ALIAS service
 After=network.target
 [Service]
 User=root
 Group=root
 Type=forking
-ExecStart=/usr/local/bin/streamiesd -daemon -conf=$CONF_DIR/streamies.conf -datadir=$CONF_DIR
-ExecStop=/usr/local/bin/streamies-cli -conf=$CONF_DIR/streamies.conf -datadir=$CONF_DIR stop
+ExecStart=/usr/local/bin/dngrcoind -daemon -conf=$CONF_DIR/dngrcoin.conf -datadir=$CONF_DIR
+ExecStop=/usr/local/bin/dngrcoin-cli -conf=$CONF_DIR/dngrcoin.conf -datadir=$CONF_DIR stop
 Restart=always
 PrivateTmp=true
 TimeoutStartSec=10m
@@ -189,8 +181,8 @@ EOF
 
   systemctl daemon-reload
   sleep 10
-  systemctl start streamies_$ALIAS.service
-  systemctl enable streamies_$ALIAS.service >/dev/null 2>&1
+  systemctl start dngrcoin_$ALIAS.service
+  systemctl enable dngrcoin_$ALIAS.service >/dev/null 2>&1
  
   rm -rf setup.sh
 
