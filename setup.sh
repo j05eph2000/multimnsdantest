@@ -65,13 +65,13 @@ fi
   sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   sudo apt -y update
   sudo apt -y upgrade
-  sudo apt -y install gcc-6
+  #sudo apt -y install gcc-6
 
-  sudo apt -y install g++-6
+  #sudo apt -y install g++-6
 
-  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6 
-  sudo apt -y update
-  sudo apt -y upgrade
+  #sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6 
+  #sudo apt -y update
+  #sudo apt -y upgrade
   
   chmod +x dngrcoind
   chmod +x dngrcoin-cli
@@ -150,8 +150,8 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "" >> dngrcoin.conf_TEMP
 
   echo "" >> dngrcoin.conf_TEMP
-  echo "port=$PORT" >> dngrcoin.conf_TEMP
-  #echo "masternodeaddr=$IP:49002" >> dngrcoin.conf_TEMP
+  #echo "port=$PORT" >> dngrcoin.conf_TEMP
+  echo "=$IP:49002" >> dngrcoin.conf_TEMP
   echo "masternodeprivkey=$PRIVKEY" >> dngrcoin.conf_TEMP
   
   
